@@ -1,5 +1,6 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import re
 
 html = urlopen('http://www.pythonscraping.com/pages/warandpeace.html')
 bs = BeautifulSoup(html.read(), 'html.parser')
@@ -44,5 +45,13 @@ for sibling in bs.find('table',{'id':'giftList'}).tr.next_siblings:
 #--------------------------------------------
 # Dealing with Parents
 #--------------------------------------------
-for sibling in bs.find('table',{'id':'giftList'}).tr.next_siblings:
-    print(sibling)
+print(bs.find('img',{'src':'../img/gifts/img1.jpg'}).parent.previous_sibling.get_text())\
+
+#--------------------------------------------
+# Regular Expressions
+#--------------------------------------------
+# prints relative image paths that start with '../img/gifts/img'
+images = bs.find_all('img',{'src':re.compile('..\/img\/gifts/img.*.jpg')})
+for image in images:
+    print(image['src'])
+
